@@ -34,24 +34,31 @@ class PrideQuizApp:
         return quotes
 
     def start_quiz(self):
-        self.user_name = self.name_entry.get()
-        if not self.user_name:
-            self.user_name = "Anonymous"
+        # Get name before clearing widgets
+        if hasattr(self, 'name_entry'):
+            name = self.name_entry.get()
+            self.user_name = name if name else "Anonymous"
 
-        self.name_label.pack_forget()
-        self.name_entry.pack_forget()
-        self.submit_button.pack_forget()
+        # Clear all widgets before restarting
+        for widget in self.root.winfo_children():
+            widget.destroy()
 
-        #just added this, keeps count of the question.
+        # Reset score and question count
+        self.score = 0
+        self.question_count = 0
+
+        # Question counter
         self.question_counter_label = tk.Label(self.root, text=f"Question: 0/{self.max_questions}")
         self.question_counter_label.pack(pady=10)
 
+        # Quote and fact display
         self.quote_label = tk.Label(self.root, text="", wraplength=400, justify="center")
         self.quote_label.pack(pady=20)
 
         self.fact_label = tk.Label(self.root, text="", wraplength=400, justify="center")
         self.fact_label.pack(pady=20)
 
+        # Score display
         score_frame = tk.Frame(self.root)
         score_frame.pack(pady=20)
 
@@ -61,18 +68,16 @@ class PrideQuizApp:
         self.score_label = tk.Label(score_frame, text="Score: 0", font=("Courier", 14, "bold"))
         self.score_label.pack()
 
-
+        # Answer buttons
         self.human_button = tk.Button(self.root, text="Human", command=lambda: self.check_answer('real'))
         self.human_button.pack(side="left", padx=20)
 
         self.ai_button = tk.Button(self.root, text="AI", command=lambda: self.check_answer('ai'))
         self.ai_button.pack(side="right", padx=20)
 
-        
-
-
-
+        # Start the quiz
         self.show_next_quote()
+
 
     def show_next_quote(self):
         self.points_awarded_label.config(text="")  # ✅ Clear the +points label
@@ -112,7 +117,7 @@ class PrideQuizApp:
 
 
     def calculate_score(self, correct, time_taken):
-        return max(200 - int(time_taken * 10), 10) if correct else 0
+        return max(200 - int(time_taken * 8), 10) if correct else 0
 
     def end_quiz(self):
         self.save_score()
@@ -144,14 +149,51 @@ class PrideQuizApp:
         for widget in self.root.winfo_children():
             widget.destroy()
 
-        game_over_label = tk.Label(self.root, text=f"Game Over! Your final score is {self.score}.", wraplength=400, justify="center")
+        game_over_label = tk.Label(
+            self.root,
+            text=f"Game Over! Your final score is {self.score}.",
+            wraplength=400,
+            justify="center"
+        )
         game_over_label.pack(pady=20)
 
         leaderboard = self.load_leaderboard()
         leaderboard_text = "Leaderboard:\n" + "\n".join(f"{entry['name']}: {entry['score']}" for entry in leaderboard)
-
         leaderboard_label = tk.Label(self.root, text=leaderboard_text, wraplength=400, justify="center")
         leaderboard_label.pack(pady=20)
+
+        # Play again as same user
+        retry_button = tk.Button(
+            self.root,
+            text=f"Play again as {self.user_name}",
+            command=self.start_quiz
+        )
+        retry_button.pack(pady=10)
+
+        # New player button
+        new_player_button = tk.Button(
+            self.root,
+            text="New Player",
+            command=self.reset_to_name_entry
+        )
+        new_player_button.pack(pady=10)
+
+    def reset_to_name_entry(self):
+        for widget in self.root.winfo_children():
+            widget.destroy()
+
+        self.score = 0
+        self.question_count = 0
+
+        self.name_label = tk.Label(self.root, text="Please enter your name:")
+        self.name_label.pack(pady=20)
+
+        self.name_entry = tk.Entry(self.root)
+        self.name_entry.pack(pady=10)
+
+        self.submit_button = tk.Button(self.root, text="Start Quiz", command=self.start_quiz)
+        self.submit_button.pack(pady=10)
+
 
 if __name__ == "__main__":
     root = tk.Tk()

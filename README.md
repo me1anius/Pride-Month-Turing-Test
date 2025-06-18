@@ -17,3 +17,4 @@ Setup Instructions
    - `leaderboard.json` (optional, will be created if not present)
 3. **Run the app**: Open a terminal or command prompt, navigate to the directory containing the files, and run the following command:
    
+Microsoft Copilot was used in the development in this game.

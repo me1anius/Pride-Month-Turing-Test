@@ -16,5 +16,7 @@ Setup Instructions
    - `quotes.csv` (sample quotes file)
    - `leaderboard.json` (optional, will be created if not present)
 3. **Run the app**: Double click 'RunMe' batch file to launch
+
+
    
 Microsoft Copilot was used in the development in this game.

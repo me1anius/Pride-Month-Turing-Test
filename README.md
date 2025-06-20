@@ -15,6 +15,6 @@ Setup Instructions
    - `pride_quiz_app.py` (Python source code)
    - `quotes.csv` (sample quotes file)
    - `leaderboard.json` (optional, will be created if not present)
-3. **Run the app**: Open a terminal or command prompt, navigate to the directory containing the files, and run the following command:
+3. **Run the app**: Double click 'RunMe' batch file to launch
    
 Microsoft Copilot was used in the development in this game.
